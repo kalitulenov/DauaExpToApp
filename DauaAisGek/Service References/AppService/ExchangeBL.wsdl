@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd1="http://www.commonTypes.org" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:tns="http://www.kaysat-ps.org" xmlns:soapbind="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12bind="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd2="http://www.kaysat-ps.org" name="ExchangeBL" targetNamespace="http://www.kaysat-ps.org" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema xmlns:tns="http://www.commonTypes.org" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.commonTypes.org" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:simpleType name="AgreementCode">
+        <xs:restriction base="xs:string">
+          <xs:length value="9" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="AmbulatoryReferenceCode">
+        <xs:restriction base="xs:string">
+          <xs:length value="11" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="ContractCode">
+        <xs:restriction base="xs:string">
+          <xs:length value="9" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="Currency">
+        <xs:restriction base="xs:decimal">
+          <xs:totalDigits value="20" />
+          <xs:fractionDigits value="10" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType name="EmployeeID">
+        <xs:restriction base="xs:unsignedLong" />
+      </xs:simpleType>
+      <xs:simpleType name="OrganizationID">
+        <xs:restriction base="xs:unsignedLong" />
+      </xs:simpleType>
+      <xs:simpleType name="RpnID">
+        <xs:restriction base="xs:unsignedLong" />
+      </xs:simpleType>
+    </xs:schema>
+    <xs:schema xmlns:xs2="http://www.kaysat-ps.org" xmlns:xs1="http://www.commonTypes.org" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.kaysat-ps.org" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import namespace="http://www.commonTypes.org" />
+      <xs:complexType name="ChekList">
+        <xs:sequence>
+          <xs:element name="chek_id" type="xs:string" />
+          <xs:element name="chek_value" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DirectionBatch">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="20000" name="Services" type="xs2:DirectionElement" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DirectionElement">
+        <xs:sequence>
+          <xs:element name="ID" type="xs:string" />
+          <xs:element name="person_id" type="xs1:RpnID" />
+          <xs:element name="direction_date" type="xs:dateTime" />
+          <xs:element name="sending_mo_id" type="xs1:OrganizationID" />
+          <xs:element name="personal_id" type="xs1:EmployeeID" />
+          <xs:element name="position_id" type="xs:long" />
+          <xs:element name="directed_mo_id" type="xs1:OrganizationID" />
+          <xs:element name="service_code" type="xs:string" />
+          <xs:element name="finance_source" type="xs:int" />
+          <xs:element name="icd_type" type="xs:int" />
+          <xs:element name="ocd_code" type="xs2:MKB10Code" />
+          <xs:element name="direction_reason" type="xs:int" />
+          <xs:element minOccurs="0" name="cancel_date" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="paymentType" nillable="true" type="xs:byte" />
+          <xs:element minOccurs="0" name="group_id" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="PatientIDN" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DoctorFirstName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DoctorLastName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DoctorMiddleName" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="DirectionResults">
+        <xs:sequence>
+          <xs:element name="Message" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResultsDirection" type="xs2:ResultDirection" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FinanceBatch">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="20000" name="Services" type="xs2:FinanceElement" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="FinanceElement">
+        <xs:sequence>
+          <xs:element name="ID" type="xs:string" />
+          <xs:element name="person_id" type="xs1:RpnID" />
+          <xs:element name="direction_date" type="xs:dateTime" />
+          <xs:element name="service_code" type="xs:string" />
+          <xs:element name="icd_type" type="xs:int" />
+          <xs:element name="ocd_code" type="xs2:MKB10Code" />
+          <xs:element name="direction_reason" type="xs:int" />
+          <xs:element name="sended_mo" type="xs1:OrganizationID" />
+          <xs:element name="sending_mo" type="xs1:OrganizationID" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetDataResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Services" type="xs2:ServiceElement" />
+          <xs:element name="Message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetDirectionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="Services" type="xs2:DirectionElement" />
+          <xs:element name="Message" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="MKB10Code">
+        <xs:restriction base="xs:string">
+          <xs:maxLength value="5" />
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:complexType name="Result">
+        <xs:sequence>
+          <xs:element name="ID" type="xs2:ServiceID" />
+          <xs:element name="Status" type="xs:boolean" />
+          <xs:element name="Info" type="xs:string" />
+          <xs:element minOccurs="0" name="FinanceSourceID" nillable="true" type="xs:long" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ResultDirection">
+        <xs:sequence>
+          <xs:element name="ID" type="xs:string" />
+          <xs:element name="Status" type="xs:boolean" />
+          <xs:element name="Info" type="xs:string" />
+          <xs:element name="ErrorCode" type="xs:int" />
+          <xs:element minOccurs="0" name="FinanceSourceID" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="IDEPS" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="soc_status" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ServiceElement">
+        <xs:sequence>
+          <xs:element name="ID" type="xs2:ServiceID" />
+          <xs:element name="Date" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Customer" nillable="true" type="xs1:OrganizationID" />
+          <xs:element name="Performer" type="xs1:OrganizationID" />
+          <xs:element name="CustomerDepartament" type="xs:long" />
+          <xs:element name="PerformerDepartament" type="xs:long" />
+          <xs:element name="CustomerEmployee" nillable="true" type="xs1:EmployeeID" />
+          <xs:element name="PerformerEmployee" nillable="true" type="xs1:EmployeeID" />
+          <xs:element name="ServiceID" type="xs:long" />
+          <xs:element name="PatientID" nillable="true" type="xs1:RpnID" />
+          <xs:element name="PatientFirstName" nillable="true" type="xs:string" />
+          <xs:element name="PatientLastName" nillable="true" type="xs:string" />
+          <xs:element name="PatientMiddleName" nillable="true" type="xs:string" />
+          <xs:element name="PatientSexID" nillable="true" type="xs:long" />
+          <xs:element name="PatientIDN" nillable="true" type="xs:string" />
+          <xs:element name="PatientBirthDate" nillable="true" type="xs:dateTime" />
+          <xs:element name="FinanceSourceID" type="xs:long" />
+          <xs:element name="VisitKindID" nillable="true" type="xs:long" />
+          <xs:element name="TreatmentReasonID" nillable="true" type="xs:long" />
+          <xs:element name="Cost" nillable="true" type="xs1:Currency" />
+          <xs:element name="Count" type="xs:decimal" />
+          <xs:element name="ServiceKind2" type="xs:boolean" />
+          <xs:element name="LeasingID" nillable="true" type="xs:string" />
+          <xs:element name="MKB10" type="xs2:MKB10Code" />
+          <xs:element name="DoctorFirstName" nillable="true" type="xs:string" />
+          <xs:element name="DoctorLastName" nillable="true" type="xs:string" />
+          <xs:element name="DoctorMiddleName" nillable="true" type="xs:string" />
+          <xs:element name="ServiceKind" type="xs:long" />
+          <xs:element name="ServiceCDSKind" type="xs:long" />
+          <xs:element name="PaymentType" type="xs:byte" />
+          <xs:element name="DateVerified" nillable="true" type="xs:dateTime" />
+          <xs:element name="Result" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Service" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="DeleteDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="Place" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Visit_type" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Group_id" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Refferal_id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Parent_id" nillable="true" type="xs2:ServiceID" />
+          <xs:element minOccurs="0" name="Diag_type" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="MIS" nillable="true" type="xs1:OrganizationID" />
+          <xs:element minOccurs="0" name="FinanceSourceOSMS" nillable="true" type="xs:long" />
+          <xs:element minOccurs="0" name="scrining_id" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="chek_list" nillable="true" type="xs2:ChekList" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ServiceElementAmb">
+        <xs:sequence>
+          <xs:element name="ID" type="xs2:ServiceID" />
+          <xs:element name="Date" type="xs:dateTime" />
+          <xs:element name="Customer" type="xs1:OrganizationID" />
+          <xs:element name="CustomerDepartament" type="xs:long" />
+          <xs:element name="CustomerEmployee" nillable="true" type="xs1:EmployeeID" />
+          <xs:element name="CustomerEmployeePostID" nillable="true" type="xs1:EmployeeID" />
+          <xs:element name="DoctorFIO" nillable="true" type="xs:string" />
+          <xs:element name="PatientID" nillable="true" type="xs1:RpnID" />
+          <xs:element name="PatientFIO" nillable="true" type="xs:string" />
+          <xs:element name="PatientIDN" nillable="true" type="xs:string" />
+          <xs:element name="PatientBirthDate" nillable="true" type="xs:dateTime" />
+          <xs:element name="PatientAddress" nillable="true" type="xs:string" />
+          <xs:element name="VisitKindID" type="xs:long" />
+          <xs:element name="TypeCall" type="xs:byte" />
+          <xs:element name="СallReason" nillable="true" type="xs:string" />
+          <xs:element name="Note" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:simpleType name="ServiceID">
+        <xs:restriction base="xs:unsignedLong" />
+      </xs:simpleType>
+      <xs:complexType name="ServicesBatch">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="20000" name="Services" type="xs2:ServiceElement" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ServicesBatchAmb">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="20000" name="Services" type="xs2:ServiceElementAmb" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ServicesBatchResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="99999" name="Results" type="xs2:ServiceID" />
+          <xs:element name="Message" type="xs:string" />
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="ResultsMIS" type="xs2:Result" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="SetData">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sData" type="xs2:ServicesBatch" />
+            <xs:element name="Token" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SetDataResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:ServicesBatchResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SetDataAmb">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sData" type="xs2:ServicesBatchAmb" />
+            <xs:element name="Token" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SetDataAmbResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:ServicesBatchResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SetReferral">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sData" type="xs2:DirectionBatch" />
+            <xs:element name="Token" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SetReferralResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:DirectionResults" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetReferral">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="directed_mo_id" type="xs1:OrganizationID" />
+            <xs:element name="date" type="xs:dateTime" />
+            <xs:element name="Token" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetReferralResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:DirectionBatch" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="FinanceSource">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="sData" type="xs2:FinanceBatch" />
+            <xs:element name="Token" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="FinanceSourceResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:DirectionResults" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetRefferalByPerson">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="IIN" type="xs:string" />
+            <xs:element name="Token" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetRefferalByPersonResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:DirectionBatch" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetData">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="size" type="xs:int" />
+            <xs:element name="Token" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="GetDataResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="return" type="xs2:GetDataResult" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </types>
+  <message name="SetDataRequestMessage">
+    <part name="parameters" element="xsd2:SetData" />
+  </message>
+  <message name="SetDataResponseMessage">
+    <part name="parameters" element="xsd2:SetDataResponse" />
+  </message>
+  <message name="SetDataAmbRequestMessage">
+    <part name="parameters" element="xsd2:SetDataAmb" />
+  </message>
+  <message name="SetDataAmbResponseMessage">
+    <part name="parameters" element="xsd2:SetDataAmbResponse" />
+  </message>
+  <message name="SetReferralRequestMessage">
+    <part name="parameters" element="xsd2:SetReferral" />
+  </message>
+  <message name="SetReferralResponseMessage">
+    <part name="parameters" element="xsd2:SetReferralResponse" />
+  </message>
+  <message name="GetReferralRequestMessage">
+    <part name="parameters" element="xsd2:GetReferral" />
+  </message>
+  <message name="GetReferralResponseMessage">
+    <part name="parameters" element="xsd2:GetReferralResponse" />
+  </message>
+  <message name="FinanceSourceRequestMessage">
+    <part name="parameters" element="xsd2:FinanceSource" />
+  </message>
+  <message name="FinanceSourceResponseMessage">
+    <part name="parameters" element="xsd2:FinanceSourceResponse" />
+  </message>
+  <message name="GetRefferalByPersonRequestMessage">
+    <part name="parameters" element="xsd2:GetRefferalByPerson" />
+  </message>
+  <message name="GetRefferalByPersonResponseMessage">
+    <part name="parameters" element="xsd2:GetRefferalByPersonResponse" />
+  </message>
+  <message name="GetDataRequestMessage">
+    <part name="parameters" element="xsd2:GetData" />
+  </message>
+  <message name="GetDataResponseMessage">
+    <part name="parameters" element="xsd2:GetDataResponse" />
+  </message>
+  <portType name="ExchangeBLPortType">
+    <operation name="SetData">
+      <input message="xsd2:SetDataRequestMessage" />
+      <output message="xsd2:SetDataResponseMessage" />
+    </operation>
+    <operation name="SetDataAmb">
+      <input message="xsd2:SetDataAmbRequestMessage" />
+      <output message="xsd2:SetDataAmbResponseMessage" />
+    </operation>
+    <operation name="SetReferral">
+      <input message="xsd2:SetReferralRequestMessage" />
+      <output message="xsd2:SetReferralResponseMessage" />
+    </operation>
+    <operation name="GetReferral">
+      <input message="xsd2:GetReferralRequestMessage" />
+      <output message="xsd2:GetReferralResponseMessage" />
+    </operation>
+    <operation name="FinanceSource">
+      <input message="xsd2:FinanceSourceRequestMessage" />
+      <output message="xsd2:FinanceSourceResponseMessage" />
+    </operation>
+    <operation name="GetRefferalByPerson">
+      <input message="xsd2:GetRefferalByPersonRequestMessage" />
+      <output message="xsd2:GetRefferalByPersonResponseMessage" />
+    </operation>
+    <operation name="GetData">
+      <input message="xsd2:GetDataRequestMessage" />
+      <output message="xsd2:GetDataResponseMessage" />
+    </operation>
+  </portType>
+  <binding name="ExchangeBLSoapBinding" type="xsd2:ExchangeBLPortType">
+    <soapbind:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="SetData">
+      <soapbind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:SetData" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="SetDataAmb">
+      <soapbind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:SetDataAmb" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="SetReferral">
+      <soapbind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:SetReferral" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="GetReferral">
+      <soapbind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:GetReferral" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="FinanceSource">
+      <soapbind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:FinanceSource" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="GetRefferalByPerson">
+      <soapbind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:GetRefferalByPerson" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="GetData">
+      <soapbind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:GetData" style="document" />
+      <input>
+        <soapbind:body use="literal" />
+      </input>
+      <output>
+        <soapbind:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <binding name="ExchangeBLSoap12Binding" type="xsd2:ExchangeBLPortType">
+    <soap12bind:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="SetData">
+      <soap12bind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:SetData" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="SetDataAmb">
+      <soap12bind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:SetDataAmb" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="SetReferral">
+      <soap12bind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:SetReferral" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="GetReferral">
+      <soap12bind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:GetReferral" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="FinanceSource">
+      <soap12bind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:FinanceSource" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="GetRefferalByPerson">
+      <soap12bind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:GetRefferalByPerson" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+    <operation name="GetData">
+      <soap12bind:operation soapAction="http://www.kaysat-ps.org#ExchangeBL:GetData" style="document" />
+      <input>
+        <soap12bind:body use="literal" />
+      </input>
+      <output>
+        <soap12bind:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="ExchangeBL">
+    <port name="ExchangeBLSoap" binding="xsd2:ExchangeBLSoapBinding">
+      <documentation>
+        <wsi:Claim xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/" conformsTo="http://ws-i.org/profiles/basic/1.1" />
+      </documentation>
+      <soapbind:address location="https://appmis.eisz.kz/app/ws/ws1.1cws" />
+    </port>
+    <port name="ExchangeBLSoap12" binding="xsd2:ExchangeBLSoap12Binding">
+      <soap12bind:address location="https://appmis.eisz.kz/app/ws/ws1.1cws" />
+    </port>
+  </service>
+</definitions>

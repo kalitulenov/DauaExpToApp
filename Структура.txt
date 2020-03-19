@@ -1,0 +1,574 @@
+<head>
+    <title>Статистическая карта амбулаторного больного</title>
+    <meta name="viewport" content="width=device-width">
+    <script src="/app/Scripts/jquery-1.9.1-vsdoc.js" type="text/javascript"></script>
+    <script src="/app/Scripts/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="/app/Scripts/modernizr-2.7.1.js" type="text/javascript"></script>
+    <script src="/app/Scripts/jquery-ui-1.10.4.js" type="text/javascript"></script>
+    <script src="/app/Scripts/jquery.validate.js" type="text/javascript"></script>
+    <script src="/app/Scripts/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+    <script src="/app/Scripts/jquery.unobtrusive-ajax.js" type="text/javascript"></script>
+    <script src="/app/Scripts/IfIE8.js" type="text/javascript"></script>
+    <script src="/app/Scripts/Main.js?22062015" type="text/javascript"></script>
+    <script src="/app/Scripts/ExternalServices.js?22062015"></script>
+    <link href="/app/Content/Site.css" rel="stylesheet" type="text/css">
+    <link href="/app/Content/themes/base/jquery-ui.css" rel="stylesheet" type="text/css">
+    <link href="/app/Content/themes/base/jquery.ui.base.css" rel="stylesheet" type="text/css">
+    <link href="/app/Content/themes/base/jquery.ui.menu.css" rel="stylesheet" type="text/css">
+    <link href="/app/Content/themes/base/jquery.ui.dialog.css" rel="stylesheet" type="text/css">
+    <link href="/app/Content/themes/base/jquery.ui.datepicker.css" rel="stylesheet" type="text/css">
+    <link href="/app/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <script src="/app/Scripts/knockout-3.3.0.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            /*
+            setTimeout(function () {
+                if (window.location.hostname.toLocaleLowerCase() != 'localhost') {
+                    alert('Страница не обновлялась 60 минут, в целях поддержания актуальной информации будет произведена плановая перезагрузка страницы');
+                    window.location.reload();
+                }
+            }, 1000 * 60 * 60 * 1);*/
+            $("#menu").menu({
+                items: "> :not(.ui-menu-icon)"
+            });
+            window.MainUrl = "/app/";
+
+        });
+    </script>
+    <script src="https://pol.eisz.kz/app/Scripts/date.js" type="text/javascript"></script>
+</head>
+<body id="body">
+    <span id="init-sp" class="loading-div" style="display: none">Подождите пожалуйста...</span>
+    <div>
+        <header>
+            <div style="display:table-cell; line-height:30px; width:100%; height:30px; position:fixed; left:0px; top:0px; background-color:#484848; vertical-align:middle;">
+                <img style="margin-left:20px; margin-top:2px;" src="/app/Images/logo.png">
+                <span style="margin-left:5px; color:white; font-size:17px; font-weight:800; position:relative; top: -7px;">ПОЛИКЛИНИКА</span>
+                <div style="float:right;">
+                    <span style="color:white;">
+                        Пользователь alm.rsvcpol.tk
+                    </span>
+                    <span style="margin-left:15px; color:white;">
+                        |
+                    </span>
+                    <span style="margin-left:15px; margin-right:25px;">
+                        <a style="color:white;" href="https://pol.eisz.kz/app/Account/SignOut?ReturnUrl=%2fapp%2fKart">
+                            Выход
+                        </a>
+                    </span>
+                </div>
+                <div style="margin-right:40px; float:right;">
+                    <a style="font-size:14px; color: white;" href="https://pol.eisz.kz/app/Account/ChangeCulture?lang=kk&amp;amp;returnUrl=/app/Kart">
+                        ?аза? тілі
+                        <img style="display:none; position: relative; top: 4px;" src="https://pol.eisz.kz/app/Images/kaz.png" alt="Казахский">
+                    </a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a style="font-size:14px; color: white;" href="https://pol.eisz.kz/app/Account/ChangeCulture?lang=ru&amp;amp;returnUrl=/app/Kart">
+                        Русский язык
+                        <img style="display:none; position: relative; top: 4px;" src="https://pol.eisz.kz/app/Images/rus.png" alt="Русский">
+                    </a>
+                </div>
+            </div>
+        </header>
+        <br><br>
+        <div class="Main">
+            <table class="MainTable" style="padding-bottom: 30px;">
+                <tbody><tr>
+                    <td class="t1">
+                            <ul tabindex="0" role="menu" class="ui-menu ui-widget ui-widget-content ui-corner-all" id="menu" style="width: 113px;">
+                                <li role="presentation" class="ui-menu-item" style="text-align:center; display: none;">
+                                    <a role="menuitem" tabindex="-1" id="ui-id-1" aria-haspopup="true" class="iconHref  ui-corner-all"><span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+                                        <img src="/app/Images/Account.png" class="icon">
+                                        <span class="iconText"> Учетные записи</span>
+                                    </a>
+                                    <ul aria-expanded="false" aria-hidden="true" role="menu" class="ui-menu ui-widget ui-widget-content ui-corner-all" style="text-align: left; display: none;">
+                                        <li role="presentation" class="ui-menu-item">
+                                            <a role="menuitem" tabindex="-1" class="ui-corner-all" id="ui-id-6" href="https://pol.eisz.kz/app/Account/SignOut?ReturnUrl=%2fapp%2fKart">
+                                                Выход
+                                            </a>
+                                        </li>
+                                        <li role="presentation" class="ui-menu-item"><a role="menuitem" tabindex="-1" class="ui-corner-all" id="ui-id-7" href="https://pol.eisz.kz/app/Account/ChangePassword">Сменить пароль</a> </li>
+                                    </ul>
+                                </li>
+                                <li role="presentation" class="ui-menu-item" style="text-align:center;">
+                                    <a role="menuitem" tabindex="-1" id="ui-id-2" class="iconHref menu-current ui-corner-all" href="https://pol.eisz.kz/app/Kart/Index">
+                                        <img src="/app/Images/Kart.png" class="icon"><br>
+                                        <span class="iconText"> Стат. карты</span>
+                                    </a>
+                                </li>
+                                                                <li role="presentation" class="ui-menu-item" style="text-align:center;">
+                                    <a role="menuitem" tabindex="-1" id="ui-id-3" class="iconHref  ui-corner-all" href="https://pol.eisz.kz/app/Prof/Index">
+                                        <img src="/app/Images/Prof.png" class="icon"><br>
+                                        <span class="iconText"> Профосмотры</span>
+                                    </a>
+                                </li>
+                                                                                                                                <li role="presentation" class="ui-menu-item" style="text-align:center;">
+                                    <a role="menuitem" tabindex="-1" id="ui-id-4" aria-haspopup="true" class="iconHref  ui-corner-all"><span class="ui-menu-icon ui-icon ui-icon-carat-1-e"></span>
+                                        <img src="/app/Images/tool.png" class="icon">
+                                        <br>
+                                        <span class="iconText">Дополнительные инструменты</span>
+                                    </a>
+                                    <ul aria-expanded="false" aria-hidden="true" role="menu" class="ui-menu ui-widget ui-widget-content ui-corner-all" style="text-align: left; display: none;">
+                                        <li role="presentation" class="ui-menu-item"><a role="menuitem" tabindex="-1" class="ui-corner-all" id="ui-id-8" href="https://pol.eisz.kz/app/SearchKart/Index"> Расширенный поиск статистических карт </a></li>
+                                        <li role="presentation" class="ui-menu-item"><a role="menuitem" tabindex="-1" class="ui-corner-all" id="ui-id-9" href="https://pol.eisz.kz/app/Extra/VraPoseshSpec"> Поменять специальность </a></li>
+                                        <li role="presentation" class="ui-menu-item"><a role="menuitem" tabindex="-1" class="ui-corner-all" id="ui-id-10" href="https://pol.eisz.kz/app/Extra/VraPoseshOtd"> Поменять отделение </a></li>
+                                        <li role="presentation" class="ui-menu-item"><a role="menuitem" tabindex="-1" class="ui-corner-all" id="ui-id-11" href="https://pol.eisz.kz/app/ScreenPlan/ReportPPMR"> Отчет ППМР </a></li>
+                                        
+                                    </ul>
+                                </li>
+                                                                                                <li role="presentation" class="ui-menu-item" style="text-align:center;">
+                                    <a role="menuitem" tabindex="-1" id="ui-id-5" class="iconHref ui-corner-all" href="/app/All.docx">
+                                        <img src="/app/Images/Help.png" class="icon">
+                                        <br>
+                                        <span class="iconText">Инструкция</span>
+                                    </a>
+                                </li>
+                                <!--
+                                    <li><a>Работа</a>
+                                        <ul>
+                                            <li><a onclick="ShowForm('/Home/Test1', 'Статистическая карта амбулаторного больного');">
+                                                    1. Ввод стат. карты для статистиков</a></li>
+                                            <li><a onclick="ShowForm('/Home/Test2');">2. Амбулаторная карта прикрепленного населения
+                                                </a></li>
+                                            <li><a>3. Ввод карты проф. осмотра (от 0-17 лет) </a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a>Документы</a>
+                                        <ul>
+                                            <li><a>Реестры</a>
+                                                <ul>
+                                                    <li><a>a</a></li>
+                                                    <li><a>b</a></li>
+                                                    <li><a>c</a></li>
+                                                    <li><a>d</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a>Реестры для Астаны</a> </li>
+                                        </ul>
+                                    </li>
+                                    -->
+                                <!--
+                                    <li class="ui-state-disabled"><a href="#">Amesville</a></li>
+                                    -->
+                            </ul>
+                    </td>
+                    <td class="t2">
+                        <div id="ContentDisplay">
+                            
+
+
+
+<div style="display: none" id="finans-selector">
+    <ul><li><a href="#" finid="100" finname="Не указано">Не указано</a></li><li>Государственный<ul><li><a href="#" finid="500" finname="Местный (прочее)">Местный (прочее)</a></li><li><a href="#" finid="2400" finname="Местный (СЕЛО)">Местный (СЕЛО)</a></li><li><a href="#" finid="3200" finname="Местный (АПП по КПН)">Местный (АПП по КПН)</a></li><li><a href="#" finid="3300" finname="Местный (скрининги)">Местный (скрининги)</a></li></ul></li><li>Иной источник<ul><li><a href="#" finid="600" finname="Спонсорская помощь">Спонсорская помощь</a></li><li><a href="#" finid="700" finname="Платные услуги">Платные услуги</a></li><li><a href="#" finid="800" finname="Иные поступления">Иные поступления</a></li><li><a href="#" finid="1100" finname="Средства добровольного страхования">Средства добровольного страхования</a></li><li><a href="#" finid="1200" finname="Средства по договору с работодателями">Средства по договору с работодателями</a></li></ul></li></ul>
+</div>
+<input id="KartIsOpened" name="KartIsOpened" value="false" type="hidden">
+<script type="text/javascript">
+    var IsAdmin = false;
+    $(function(){
+        $("#Find").focus();
+    });
+    var FindArray = [];
+    window.CurrentFind = -1;
+    $("#body").keydown(function (e) {
+        if ((e.keyCode == 38 || e.keyCode == 40) && $("#KartIsOpened").val() == "false")
+        {
+            e.preventDefault();
+            if (e.keyCode == 40 && $("#KartIsOpened").val() == "false")
+            {
+                if (window.CurrentFind != FindArray.length-1)
+                    window.CurrentFind++;
+            }
+            if (e.keyCode == 38 && $("#KartIsOpened").val() == "false")
+            {
+                if (window.CurrentFind!= 0)
+                    window.CurrentFind--;
+            }
+            $(".CurrentHuman").css('font-weight', 'normal');
+            $("#"+ FindArray[window.CurrentFind]).css('font-weight', 'bold');
+            window.location.hash=FindArray[window.CurrentFind];
+            $("#AddKartImage").remove();
+            $("#Karts2").empty();
+        }
+        if (e.ctrlKey && e.keyCode == 81 && $("#KartIsOpened").val() == "false") {
+            e.preventDefault();
+            if ($("#AddKartImage") == undefined || $("#AddKartImage").length == 0)
+            {
+                OpenKart(FindArray[window.CurrentFind].substring(12, FindArray[window.CurrentFind].length), false);
+            }
+            else
+            {
+                if ($("#KartIsOpened").val() == "false")
+                    $("#AddKartImage").click();
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        window.onload = UpdateSize;
+        window.onresize = UpdateSize;
+    });
+    function UpdateSize() {
+        var height = window.innerHeight ||
+            document.documentElement.clientHeight ||
+            document.body.clientHeight;
+        $("#Names").css('height', height - 130);
+        $("#Names").css('min-height', height - 130);
+        $("#Kkarts").css('height', height - 130);
+        $("#Kkarts").css('min-height', height - 130);
+    }
+    function ShowForm(uid, humanuid, callback) {
+        var begin = "<div id=\"" + uid + "\" style=\"display:none;\"><div>";
+        var end = "</div></div>";
+        if (uid == 'Create')
+        {
+            $.ajax({
+                url: window.MainUrl + "Kart/PolKarty",
+                data: { humanuid: humanuid, create: true },
+                type: "GET"
+            }).done(function (data) {
+                $("#Ajax").empty();
+                $("#Ajax").append(begin + data + end);
+                $("#" + uid).dialog({
+                    modal: true,
+                    title: 'Статистическая карта амбулаторного больного',
+                    autoOpen: true,
+                    height: 600,
+                    width: 950,
+                    beforeClose: function (event, ui) {
+                        $("#" + uid).remove();
+                        $("#KartIsOpened").val("false");
+                        OpenKart(FindArray[window.CurrentFind].substring(12, FindArray[window.CurrentFind].length), false);
+                        $("#Find").val("");
+                        $("#Find").delay(1000).focus();
+                    },
+                    closeOnEscape: false
+                });
+                $(".datepicker").datepicker();
+                $(".ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close").attr('tabindex', '-1');
+            });
+        }
+        else
+        {
+            var begin = "<div id=\"" + uid + "\" style=\"display:none;\"><div>";
+            var end = "</div></div>";
+            $.ajax({
+                url: window.MainUrl + "Kart/PolKarty",
+                data: { uid: uid },
+                type: "GET"
+            }).done(function (data) {
+                $("#Ajax").empty();
+                $("#Ajax").append(begin + data + end);
+                $("#" + uid).dialog({
+                    modal: true,
+                    title: 'Статистическая карта амбулаторного больного',
+                    autoOpen: true,
+                    height: 600,
+                    width: 950,
+                    beforeClose: function (event, ui) {
+                        $("#Find").val("");
+                        $("#" + uid).remove();
+                        $("#KartIsOpened").val("false");
+                        OpenKart(FindArray[window.CurrentFind].substring(12, FindArray[window.CurrentFind].length), false);
+                        $("#Find").delay(1000).focus();
+                    },
+                    closeOnEscape: false
+                });
+                $(".datepicker").datepicker();
+                $(".ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-dialog-titlebar-close").attr('tabindex', '-1');
+            });
+        }
+    }
+    
+    function OpenKart(Guid) {
+        $("#Karts").empty();
+        $.each(FindArray, function(key, value){
+            if (value == "CurrentHuman"+Guid)
+                window.CurrentFind = key;
+        });
+        //$(".CurrentHuman").css('color', 'black');
+        $(".CurrentHuman").css('font-weight', 'normal');
+        //$("#CurrentHuman" + Guid).css('color', 'RoyalBlue3');
+        $("#CurrentHuman" + Guid).css('font-weight', 'bold');
+IsKartEditor = true;
+        $.ajax({
+            type: "POST",
+            url: '/app/Kart/GetKartsByUid',
+            data: { rpnId: Guid }
+        }).done(function(data) {
+            if (data) {
+                $("#Karts").empty();
+                
+                var temp = "";
+                var humanuid = data.HUMANUID;
+                $.each(data.ret, function(key, value) {
+                    if (value.slobr == 1) {
+                        temp += "<fieldset class=\"fieldKartSPOOne\" style=\"margin-bottom:5px; cursor:pointer; font-size:17px;\" id=\"kart" + value.uid + "\" >";
+                    } else {
+                        temp += "<fieldset class=\"fieldKartSPOTWO\" style=\"margin-bottom:5px; cursor:pointer; font-size:17px;\" id=\"kart" + value.uid + "\" >";
+                    }
+                    if (value.kodorg == '03FQ') {
+                        temp += "<div onclick=\"ShowForm('" + value.uid + "', '" + value.human_uid + "')\" >";
+                    } else {
+                        temp += "<div>";
+                    }
+                    if (value.nomkart != null && value.nomkart != "")
+                        temp += "<b>Номер карты: </b>" + value.nomkart + "<br/>";
+                    //if (value.rusname != null && value.rusname != "")
+                    temp += "<b>Мед-организация: </b>" + value.kodorg + " - " + value.org_name + "<br/>";
+                    if (value.spo != null && value.spo != "")
+                        temp += "<b>Дата последнего посещения: </b>" + value.spo + "<br/>";
+                    if (value.povod != null && value.povod != "")
+                        temp += "<b>Повод обращения: </b>" + value.povod + "<br/>";
+                    temp += "</div>";
+                    if (value.kodorg == '03FQ') {
+                        temp += "<input type=\"button\" value = \"Просмотр/Редактирование\" onclick=\"ShowForm('" + value.uid + "', '" + value.human_uid + "')\" />";
+                    }
+                    if ((value.kodorg == '03FQ' && value.slobr != 1) || (value.slobr == 1 && value.kodorg == '03FQ' && false)) {
+                        if (value.Has) {
+                            temp += "<input type=\"button\" value=\"Удалить карту\" onclick=\"DeleteWithAlert(event,'" + value.uid + "')\" >";
+                        } else {
+                            temp += "<input type=\"button\" value=\"Удалить карту\" onclick=\"DeleteKart(event,'" + value.uid + "')\" >";
+                        }
+                    }
+                    temp += "</fieldset>";
+                    humanuid = value.human_uid;
+                });
+                if (data.prik == '03FQ') {
+                    $("#Karts").append("<img id=\"AddKartImage\" src=\"/app/Images/Add.jpg\" width=\"30\" onclick=\"AddKart('" + humanuid + "');\" alt=\"Добавить карту\" title=\"Добавить карту\" ><br/><br/>");
+                } else {
+                    $("#Karts").append("<img id=\"AddKartImage\" src=\"/app/Images/Add.jpg\" width=\"30\" onclick=\"alert('Человек не прикреплен к данной поликлинике'); AddKart('" + humanuid + "');\" alt=\"Добавить карту\" title=\"Добавить карту\" ><br/><br/>");
+                }
+                $("#Karts").append("<div id=\"Karts2\">" + temp + "</div>");
+                $('#kname').show(200);
+            } else {
+
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function AddKart(humanuid) {
+        $("#KartIsOpened").val("true");
+        ShowForm('Create', humanuid);
+        //$.ajax({
+        //    url: '/app/Kart/AddKart',
+        //    type: "POST",
+        //    data: { humanuid: humanuid }
+        //}).done(function (data) {
+        //    OpenKart(humanuid, true);
+        //});
+    }
+    function DeleteKart(event, uid) {
+        if (confirm("Удалить карту?")) {
+            $.ajax({
+                url: '/app/Kart/DeleteKart',
+                type: "POST",
+                data: { uid: uid }
+            }).done(function (data) {
+                $("#kart" + uid).hide(1000);
+            });
+        }
+    }
+    function DeleteWithAlert(event, uid) {
+        if (confirm("Данная стат. карта связана с проф. осмотром. Удаление стат. карты приведет к удалению проф. осмотра. Вы действительно хотите это сделать?")) {
+            DeleteKart(event, uid);
+        } 
+    }
+</script>
+<table class="InnerTable" id="FindTable">
+    <tbody><tr>
+        <td style="vertical-align: top; width: 60%;">
+            <div>
+<form novalidate="novalidate" action="/app/Kart" method="post">                    <table style="width:100%;">
+                        <tbody><tr>
+                            <td>
+                                <fieldset style="width: 90%;">
+                                    <legend>Поиск</legend>
+                                    <table style="width: 100%;">
+                                        <tbody><tr>
+                                            <td style="width: 90%;">
+                                                <input value="" style="width: 100%;" id="Find" name="Find" placeholder="Поиск по ФИО или ИИН" autocomplete="off" type="search">
+                                            </td>
+                                            <td>
+                                                <input value="Найти" type="submit">
+                                            </td>
+                                        </tr>
+                                    </tbody></table>
+                                </fieldset>
+                            </td>
+                            <td>
+                                <a href="/app/Kart.docx">
+                                    <img src="/app/Images/helpQ.jpg" alt="Скачать руководство пользователя" title="Скачать руководство пользователя" style="width:16px;">
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody></table>
+</form>            </div>
+            <br>
+            <div id="Names" style="overflow: scroll; height: 584px; min-height: 584px;">
+                <table style="width: 100%;" class="NamesTable">
+                    <thead class="header">
+                        <tr style="vertical-align: top;">
+                            <th>
+                                <b>ФИО</b>
+                            </th>
+                            <th>
+                                <b>Дата рождения</b>
+                            </th>
+                            <th>
+                                <b>ИИН</b>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </td>
+        <td style="vertical-align: top; width: 40%;">
+            <div>
+                <table>
+                    <tbody><tr>
+                        <td>
+                            <div style="width:30px; height:30px; background-color: #3CB371">
+
+                            </div>
+                        </td>
+                        <td>
+                            Карты с завершенным СПО
+
+                        </td>
+                    </tr>
+                </tbody></table>
+                <table>
+                    <tbody><tr>
+                        <td>
+                            <div style="width:30px; height:30px; background-color: #FA8072">
+
+                            </div>
+                        </td>
+                        <td>
+                            Карты с незавершенным СПО
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+            <div style="margin-top: 10px; font-size: 15px; text-align: center;" id="kname">
+                <b>Карты</b>
+            </div>
+            <div id="Kkarts" style="overflow: scroll; min-width: 400px; height: 584px; min-height: 584px;">
+                <div id="Karts">
+                </div>
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+
+
+                        </div>
+                    </td>
+                </tr>
+            </tbody></table>
+
+        </div>
+            <footer>
+                <div style="width:100%; position: fixed; bottom:0px; height:30px; background-color:#484848; text-align:center; color:white;">
+                        <span>ТОО "Республиканский семейно-врачебный центр"</span>
+                    &nbsp;&nbsp;|&nbsp;&nbsp; 03FQ
+                </div>
+            </footer>
+        <div id="Ajax" style="display: none;">
+            <!-- Ajax для Dialog lvl1 -->
+        </div>
+        <div id="Ajax2" style="display: none;">
+            <!-- Ajax для Dialog lvl2 -->
+        </div>
+        <div id="AjaxLoad" class="ajaxloader">
+            <img src="https://pol.eisz.kz/app/Images/ajax-loader.gif" alt="Loading">
+        </div>
+        
+
+
+
+<!--  Список врачей  -->
+<div id="spis_vraModule" style="display: none;">
+    <input id="GlobalVrauuuid" value="" type="hidden">
+    <table>
+        <tbody><tr>
+            <td>
+                ИИН
+            </td>
+            <td>
+                <input value="" id="GlobalVraIIN" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                ФИО
+            </td>
+            <td>
+                <input value="" id="GlobalVraFIO" type="text">
+            </td>
+        </tr>
+    </tbody></table>
+    <div id="vrasModule" style="width: 100%; height: 230px; overflow: scroll;">
+    </div>
+</div>
+<!--  Список врачей END  -->
+
+<!-- Список диагнозов -->
+<div id="spmkbModule" style="display:none;">
+    <input id="spmkbHiddenGlobal" type="hidden">
+    <table style="display: none;">
+        <tbody><tr>
+            <td>
+                Код
+            </td>
+            <td>
+                <input value="" id="spmkbDivID" type="text">
+            </td>
+            <td>
+                <input onclick="FindSPMKBByKOD()" value="Найти" type="button">
+            </td>
+        </tr>
+        <tr style="display:none;">
+            <td>
+                Название
+            </td>
+            <td>
+                <input value="" id="spmkbDivName" type="text">
+            </td>
+            <td>
+                <input onclick="FindSPMKBByNAME()" value="Найти" type="button">
+            </td>
+        </tr>
+    </tbody></table>
+    <div id="spmkbSpisModule">
+    </div>
+</div>
+<!-- Список диагнозов END -->
+
+<!-- Осторожно, добавление таких дивов может привести к некоректной работе KartController,
+     а удаление к некоректной работе ProfController, добавлять следует с уникальными именами -->
+    </div>
+    <script type="text/javascript">
+        var $buoop = {};
+        $buoop.ol = window.onload;
+        window.onload = function () {
+            try { if ($buoop.ol) $buoop.ol(); } catch (e) { }
+            var e = document.createElement("script");
+            e.setAttribute("type", "text/javascript");
+            e.setAttribute("src", "//browser-update.org/update.js");
+            document.body.appendChild(e);
+        }
+            $(window).load(function () {
+            window.MainUrl = "/app/";
+            NewLocalStorageFor('03FQ');
+            LocalTarUsl();
+            LocalSpisVra();
+        });    </script>
+    <div id="KartErrorList" style="background-color:white; position:fixed; right:5%; top:40%; color:red; font-size:14px; z-index:99999 !important">
+    </div>
+
+
+
+</body>
